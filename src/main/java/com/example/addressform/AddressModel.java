@@ -1,5 +1,6 @@
 package com.example.addressform;
 
+import com.example.addressbusinessinterface.Address;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -7,10 +8,16 @@ import javafx.beans.property.StringProperty;
 
 public class AddressModel {
 
+    private AddressService service;
+
     private StringProperty country = new SimpleStringProperty();
     private StringProperty street = new SimpleStringProperty();
     private IntegerProperty zipCode = new SimpleIntegerProperty();
     private IntegerProperty houseNumber = new SimpleIntegerProperty();
+
+    public AddressModel(AddressService service) {
+        this.service = service;
+    }
 
     public StringProperty countryProperty()  {
         return country;
@@ -61,6 +68,16 @@ public class AddressModel {
     }
 
     public void save() {
-        this.street.set("Bussigasse");
+        this.street.set(this.street.get().replace("Str", "Street"));
+        this.service.saveAddress(this);
+    }
+
+
+    public void loadCurrent() {
+        Address address = this.service.getCurrentAddress();
+        this.setCountry(address.getCountry());
+        this.setStreet(address.getStreet());
+        this.setZipCode(address.getZipCode());
+        this.setHouseNumber(address.getHouseNumber());
     }
 }

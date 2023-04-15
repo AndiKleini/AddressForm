@@ -1,5 +1,6 @@
 package com.example.addressform;
 
+import com.example.addressbusinessinterface.Address;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -24,12 +25,9 @@ public class AddressFormController implements Initializable {
         welcomeText.setText("Welcome to JavaFX Application!");
     }
 
-    public AddressFormController() {
-        this.addressMOdel = new AddressModel();
-        this.addressMOdel.setCountry("Austria");
-        this.addressMOdel.setStreet("Gartengasse");
-        this.addressMOdel.setHouseNumber(12);
-        this.addressMOdel.setZipCode(2234);
+    public AddressFormController(AddressService service) {
+        this.addressMOdel = new AddressModel(service);
+
     }
 
     @Override
@@ -48,6 +46,8 @@ public class AddressFormController implements Initializable {
         this.streetInput.textProperty().bindBidirectional(this.addressMOdel.streetProperty());
         this.houseNumberInput.textProperty().bindBidirectional(this.addressMOdel.houseNumberProperty(), standardConverter);
         this.zipCodeInput.textProperty().bindBidirectional(this.addressMOdel.zipCodeProperty(), standardConverter);
+
+        this.addressMOdel.loadCurrent();
     }
 
     public void onSubmitAddress(ActionEvent actionEvent) {
